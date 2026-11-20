@@ -19,3 +19,115 @@
   --cmp-cor-erro: #ff7b72;
   --cmp-cor-desabilitado: #262c33;
 }
+
+/* ---------------------------------------------------------------- campos */
+.cmp-campo {
+  display: grid;
+  gap: 6px;
+  font-family: var(--cmp-fonte);
+  font-size: var(--cmp-tamanho-fonte);
+  color: var(--cmp-cor-texto);
+}
+.cmp-rotulo { font-weight: 500; }
+.cmp-obrigatorio { color: var(--cmp-cor-erro); }
+.cmp-linha { display: flex; align-items: center; gap: 8px; }
+.cmp-entrada-envoltorio { position: relative; flex-shrink: 0; }
+
+.cmp-entrada {
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 8px;
+  font: inherit;
+  color: inherit;
+  background: var(--cmp-cor-fundo);
+  border: 1px solid var(--cmp-cor-borda);
+  border-radius: var(--cmp-raio);
+  outline: none;
+}
+.cmp-entrada:focus { border-color: var(--cmp-cor-foco); box-shadow: 0 0 0 2px color-mix(in srgb, var(--cmp-cor-foco) 30%, transparent); }
+.cmp-entrada[aria-invalid="true"] { border-color: var(--cmp-cor-erro); }
+.cmp-entrada:disabled, .cmp-entrada:read-only { background: var(--cmp-cor-desabilitado); }
+
+.cmp-sufixo {
+  position: absolute;
+  inset: 0 10px 0 auto;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0.65;
+}
+.cmp-erro { color: var(--cmp-cor-erro); font-weight: 500; }
+
+.cmp-botao {
+  font: inherit;
+  color: inherit;
+  background: var(--cmp-cor-fundo);
+  border: 1px solid var(--cmp-cor-borda);
+  border-radius: var(--cmp-raio);
+  cursor: pointer;
+}
+.cmp-botao:hover:not(:disabled) { background: var(--cmp-cor-desabilitado); }
+.cmp-botao:disabled { opacity: 0.5; cursor: not-allowed; }
+.cmp-botao-icone { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; }
+.cmp-botao-primario { background: var(--cmp-cor-foco); color: #fff; border-color: var(--cmp-cor-foco); height: 32px; }
+.cmp-botao-primario:hover:not(:disabled) { background: var(--cmp-cor-foco); filter: brightness(1.1); }
+
+/* ---------------------------------------------------------------- popover */
+.cmp-popover-raiz { position: relative; display: inline-block; }
+.cmp-popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 50;
+  min-width: 240px;
+  padding: 10px;
+  background: var(--cmp-cor-fundo);
+  color: var(--cmp-cor-texto);
+  border: 1px solid var(--cmp-cor-borda);
+  border-radius: var(--cmp-raio);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.18);
+  outline: none;
+}
+.cmp-popover-lista { min-width: 96px; max-height: 256px; overflow-y: auto; padding: 4px; }
+.cmp-item-lista {
+  display: block;
+  width: 100%;
+  padding: 4px 8px;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.cmp-item-lista:hover, .cmp-item-lista:focus-visible { background: var(--cmp-cor-desabilitado); outline: none; }
+.cmp-item-atual { font-weight: 600; background: var(--cmp-cor-desabilitado); }
+.cmp-item-vazio { opacity: 0.65; }
+
+/* ---------------------------------------------------------------- calendário */
+.cmp-calendario { display: grid; gap: 8px; }
+.cmp-calendario-topo { display: flex; align-items: center; gap: 4px; }
+.cmp-calendario-mes { flex: 1; }
+.cmp-selecao {
+  height: 32px;
+  padding: 0 4px;
+  font: inherit;
+  color: inherit;
+  background: var(--cmp-cor-fundo);
+  border: 1px solid var(--cmp-cor-borda);
+  border-radius: var(--cmp-raio);
+}
+.cmp-calendario-semana, .cmp-calendario-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.cmp-calendario-semana { font-size: 0.85em; opacity: 0.65; }
+.cmp-dia { height: 32px; font: inherit; color: inherit; background: transparent; border: 0; border-radius: var(--cmp-raio); cursor: pointer; }
+.cmp-dia:hover:not(:disabled) { background: var(--cmp-cor-desabilitado); }
+.cmp-dia:disabled { opacity: 0.3; cursor: not-allowed; }
+.cmp-dia-hoje { box-shadow: inset 0 0 0 1px var(--cmp-cor-foco); }
+.cmp-dia-escolhido, .cmp-dia-escolhido:hover:not(:disabled) { background: var(--cmp-cor-foco); color: #fff; font-weight: 600; }
+.cmp-calendario-hoje { height: 32px; }
+
+.cmp-painel-datahora { display: grid; gap: 10px; }
+.cmp-painel-hora { display: flex; align-items: center; justify-content: center; gap: 4px; }
+.cmp-entrada-hora { width: 56px; text-align: center; }
+.cmp-painel-erro { margin: 0; text-align: center; font-size: 0.85em; }
