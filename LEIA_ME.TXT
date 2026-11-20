@@ -1,0 +1,92 @@
+=====================================================================
+ BIBLIOTECA DE COMPONENTES REACT + PYTHON  -  GUIA RAPIDO
+=====================================================================
+
+Esta pasta e a biblioteca de componentes reutilizaveis para projetos com
+frontend React/TypeScript e backend Python (FastAPI). Ela NAO e um sistema:
+e consumida pelos outros projetos.
+
+Existem DOIS arquivos na raiz feitos para o Claude ler quando for preciso
+usar a biblioteca em um projeto:
+
+  1) listaComponentes.md
+  2) OrientarImplementacao.md
+
+---------------------------------------------------------------------
+ 1) listaComponentes.md  -  O QUE EXISTE
+---------------------------------------------------------------------
+E o catalogo. Lista TODOS os componentes (DataField, DataHoraField,
+CpfField, CnpjField, MmAaaaField, ComboField, GridField, LookUpField,
+Carregando, ComponentesProvider, FNC_FORMATA e o backend do Lookup) e,
+para cada um, TODOS os parametros, com tipo, se e obrigatorio, valor
+padrao e uma explicacao de cada parametro.
+
+Use quando o analista quiser saber "quais componentes eu tenho?" ou
+"quais parametros esse componente aceita?".
+
+  Exemplo de pedido ao Claude:
+    "Leia o arquivo listaComponentes.md e me diga quais componentes
+     existem e os parametros do GridField."
+
+---------------------------------------------------------------------
+ 2) OrientarImplementacao.md  -  COMO IMPLEMENTAR
+---------------------------------------------------------------------
+E o roteiro de implementacao. Orienta o Claude, passo a passo, a colocar
+UM componente em um projeto: regras gerais, preparacao do projeto
+(instalar o pacote, importar o CSS, montar o Provider), e uma secao
+propria para cada componente (como ligar o estado, o que fazer no
+envio/recebimento da API, armadilhas e como conferir). Termina com um
+checklist.
+
+Voce informa o NOME do componente no pedido; o Claude le as regras gerais,
+a preparacao e SOMENTE a secao daquele componente.
+
+  Exemplos de pedido ao Claude (dentro do projeto que vai receber o
+  componente):
+    "Leia o arquivo OrientarImplementacao.md e implemente o componente
+     DataField na tela de cadastro de clientes."
+    "Leia o arquivo OrientarImplementacao.md e implemente o componente
+     LookUpField (campo Cliente) na tela de pedidos."
+    "Leia o arquivo OrientarImplementacao.md e implemente o componente
+     BackendLookup no nosso FastAPI."
+
+  Nomes validos: ComponentesProvider, FNC_FORMATA, DataField,
+  DataHoraField, CpfField, CnpjField, MmAaaaField, ComboField, GridField,
+  LookUpField, Carregando, BackendLookup.
+
+---------------------------------------------------------------------
+ ORDEM RECOMENDADA
+---------------------------------------------------------------------
+  1. (Opcional) listaComponentes.md  -> escolher o componente e ver os
+     parametros.
+  2. OrientarImplementacao.md <nome_do_componente>  -> implementar.
+  3. Em caso de duvida, o manual detalhado do componente esta em
+     .claude\docs\manuais\  (ex.: Manual_DataField.md).
+
+  Para instalar a biblioteca pela primeira vez em um projeto, a secao
+  "B. Preparacao do projeto" do OrientarImplementacao.md resume o passo
+  a passo; o guia completo e .claude\docs\manuais\Manual_Instalacao.md.
+
+---------------------------------------------------------------------
+ MAPA DA PASTA
+---------------------------------------------------------------------
+  listaComponentes.md        catalogo de componentes e parametros
+  OrientarImplementacao.md   roteiro de implementacao por componente
+  LEIA_ME.TXT                este arquivo
+  frontend\                  pacote npm @componentes/react (codigo)
+  backend\                   pacote Python componentes_py (codigo)
+  .claude\                   documentacao do projeto: README, manuais por
+                             componente, resumo de cada fase e a lista
+                             de diferencas em relacao ao Nexus
+
+---------------------------------------------------------------------
+ AVISOS IMPORTANTES
+---------------------------------------------------------------------
+  * Os projetos CONSOMEM a biblioteca; nao devem copiar nem alterar o
+    codigo daqui. Defeito ou recurso faltando: relatar ao analista.
+  * O LookUpField precisa do backend (componentes_py) no projeto.
+  * Pontos ainda nao verificados (bancos Oracle/SQL Server/PostgreSQL
+    reais e visual no navegador): ver .claude\docs\Diferencas_Nexus.md.
+  * Mantenha estes dois .md atualizados quando um componente mudar
+    (props novas, comportamento novo).
+=====================================================================

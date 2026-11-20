@@ -6,6 +6,7 @@ Portagem dos componentes do Nexus; o Nexus (`D:\nexus`) é somente leitura.
 ## Regra de organização
 - **Código** (frontend, backend, testes, exemplos): estrutura de pastas na raiz do projeto (`frontend\`, `backend\`).
 - **Documentos `.md`** (orientações, manuais, decisões, README, resumos de fase): **sempre dentro de `.claude\`**. Nunca criar `.md` fora dela.
+  - **Exceção pedida pelo usuário**: na raiz ficam `listaComponentes.md`, `OrientarImplementacao.md` e `LEIA_ME.TXT` (lidos pelo Claude dos projetos consumidores). Mantê-los atualizados quando um componente mudar (props, comportamento).
 
 ## Mapa de `.claude\`
 | Caminho | Conteúdo |
