@@ -6,6 +6,10 @@ import {
   DataField,
   DataHoraField,
   GridField,
+  LookUpField,
+  type LookupCodigo,
+  type LookupDefinicao,
+  type LookUpResultado,
   type GridColuna,
   type GridLinha,
   MIN_DATE,
@@ -41,6 +45,30 @@ const PESSOAS: GridLinha[] = Array.from({ length: 23 }, (_, i) => ({
   ativo: i % 3 === 0 ? "S" : "N",
 }));
 
+const DEFINICAO_PESSOA: LookupDefinicao = {
+  chave: "pessoa",
+  banco: "SQLITE",
+  base: "TABELA",
+  nomeTabela: "pessoa",
+  colunaRetorno: "cd_pessoa",
+  tipoColunaRetorno: "NUMERO",
+  colunaDescricao: "nm_pessoa",
+  colunasBasePesquisa: ["nm_pessoa"],
+  tipoConsulta: "POR_LIKE",
+  colunasGrid: [
+    { coluna: "cd_pessoa", cabecalho: "Código" },
+    { coluna: "nm_pessoa", cabecalho: "Nome" },
+    { coluna: "dt_nascimento", cabecalho: "Nascimento" },
+    { coluna: "nr_cpf", cabecalho: "CPF" },
+    { coluna: "tp_situacao", cabecalho: "Situação" },
+  ],
+  colunasOrderBy: ["nm_pessoa"],
+  colunaCpf: "nr_cpf",
+  colunaCnpj: "nr_cnpj",
+  colunaDtNascto: "dt_nascimento",
+  qtdeLinhas: 10,
+};
+
 export function App() {
   const [wData, prcDefinirData] = useState<Date>(MIN_DATE);
   const [wDataHora, prcDefinirDataHora] = useState<Date>(MIN_DATE);
@@ -48,6 +76,7 @@ export function App() {
   const [wCnpj, prcDefinirCnpj] = useState("");
   const [wCompetencia, prcDefinirCompetencia] = useState("");
   const [wUf, prcDefinirUf] = useState("");
+  const [wPessoa, prcDefinirPessoa] = useState<LookupCodigo>(0);
   const [wUltimo, prcDefinirUltimo] = useState<Record<string, unknown>>({});
 
   function prcRegistrar(nome: string, resultado: unknown): void {
@@ -58,7 +87,7 @@ export function App() {
     <main style={{ fontFamily: "var(--cmp-fonte)", padding: 24, display: "grid", gap: 16, maxWidth: 720 }}>
       <h1 style={{ margin: 0 }}>Componentes React + Python</h1>
       <p style={{ margin: 0 }}>
-        Campos (Fase 2) e Grid (Fase 3). Teclas: <b>Enter/↓</b> próximo, <b>↑</b> anterior, <b>F4</b> abre o painel. Texto inválido bloqueia a saída.
+        Campos (Fase 2), Grid (Fase 3) e LookUpField (Fase 5). Teclas: <b>Enter/↓</b> próximo, <b>↑</b> anterior, <b>F4</b> abre o painel. Texto inválido bloqueia a saída.
       </p>
 
       <Secao titulo="DataField" resultado={wUltimo.data}>
@@ -130,6 +159,26 @@ export function App() {
             prcRegistrar("uf", r);
           }}
         />
+      </Secao>
+
+      <Secao titulo="LookUpField (precisa da API Python de exemplo na porta 8100)" resultado={wUltimo.lookup}>
+        <LookUpField
+          label="Pessoa"
+          definicao={DEFINICAO_PESSOA}
+          value={wPessoa}
+          onChange={(r: LookUpResultado) => {
+            prcDefinirPessoa(r.codigo);
+            prcRegistrar("lookup", r);
+          }}
+          tituloPesquisa="Pesquisar pessoa"
+          tipoRefreshGrid="AUTOMATICA"
+          obrigatorio
+          mensagemNaoExistencia="Pessoa não cadastrada"
+          mapaValores={{ tp_situacao: { A: "Ativo", I: "Inativo" } }}
+          mascaraGrid={{ nr_cpf: "ZZZ.ZZZ.ZZZ-ZZ" }}
+          highlightDoTermoBuscado
+        />
+        <small>Digite um código (1 a 12) e saia do campo, ou use F4 / "...". No modal: texto, CPF (ex.: 10000791989) ou data.</small>
       </Secao>
 
       <Secao titulo="GridField" resultado={wUltimo.grid}>

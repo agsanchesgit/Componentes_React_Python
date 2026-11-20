@@ -1,12 +1,10 @@
 import { createRoot } from "react-dom/client";
-import { ComponentesProvider, type ApiHttp } from "@componentes/react";
+import { ComponentesProvider } from "@componentes/react";
+import { criarApiFetch } from "./apiFetch";
 import { App } from "./App";
 
-// API de mentira, só para a Fase 0. As Fases 4/5 trocam por axios apontando para o back de exemplo.
-const apiExemplo: ApiHttp = {
-  post: () => Promise.reject(new Error("Backend de exemplo ainda não configurado.")),
-  get: () => Promise.reject(new Error("Backend de exemplo ainda não configurado.")),
-};
+// A base "/api/" é encaminhada pelo Vite para a API Python de exemplo (porta 8100); o Lookup fica em "Lookup".
+const apiExemplo = criarApiFetch("/api/");
 
 createRoot(document.getElementById("raiz")!).render(
   <ComponentesProvider api={apiExemplo}>

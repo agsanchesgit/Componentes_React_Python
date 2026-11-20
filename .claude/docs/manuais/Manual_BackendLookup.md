@@ -127,13 +127,13 @@ python -m venv .venv
 .venv\Scripts\python -m pip install -e ".[dev]"
 .venv\Scripts\python -m pytest                      # 170 testes
 .venv\Scripts\python -m ruff check .
-.venv\Scripts\python -m uvicorn exemplos.api_exemplo:app --port 8000
+.venv\Scripts\python -m uvicorn exemplos.api_exemplo:app --port 8100
 ```
 
 A API de exemplo (`exemplos/api_exemplo.py`) usa uma tabela fictícia `pessoa` em SQLite (`cd_pessoa`, `nm_pessoa`, `dt_nascimento`, `nr_cpf`, `nr_cnpj`, `tp_situacao`), com `permitir_anonimo=True`. Chame com `banco: "SQLITE"`.
 
 ```powershell
-curl -X POST localhost:8000/api/Lookup/codigo -H "Content-Type: application/json" -d '{"definicao":{"banco":"SQLITE","base":"TABELA","nomeTabela":"pessoa","colunaRetorno":"cd_pessoa","tipoColunaRetorno":"NUMERO","colunaDescricao":"nm_pessoa","colunasBasePesquisa":["nm_pessoa"],"tipoConsulta":"POR_LIKE","colunasGrid":[{"coluna":"cd_pessoa","cabecalho":"Código"}]},"valor":"4"}'
+curl -X POST localhost:8100/api/Lookup/codigo -H "Content-Type: application/json" -d '{"definicao":{"banco":"SQLITE","base":"TABELA","nomeTabela":"pessoa","colunaRetorno":"cd_pessoa","tipoColunaRetorno":"NUMERO","colunaDescricao":"nm_pessoa","colunasBasePesquisa":["nm_pessoa"],"tipoConsulta":"POR_LIKE","colunasGrid":[{"coluna":"cd_pessoa","cabecalho":"Código"}]},"valor":"4"}'
 ```
 
 ## 10. Armadilhas

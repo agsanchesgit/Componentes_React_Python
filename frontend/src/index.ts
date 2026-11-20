@@ -1,7 +1,7 @@
 // API pública: quem consome importa somente daqui ("@componentes/react").
 import "./estilos.css";
 
-export { ComponentesProvider, useComponentesApi } from "./provider";
+export { ComponentesProvider, useComponentesApi, useComponentesCaminhoLookup } from "./provider";
 export type { ComponentesProviderProps } from "./provider";
 export type { ApiHttp, OpcoesRequisicao, RespostaHttp } from "./tipos";
 export { FNC_FORMATA, MIN_DATE } from "./formata/formata";
@@ -29,3 +29,21 @@ export type {
 export { GridField } from "./grid/GridField";
 export { GRID_MAX_LINHAS } from "./grid/grid";
 export type { GridAcao, GridColuna, GridFieldProps, GridLinha, GridOrdem, GridTipo } from "./grid/grid.types";
+
+export { LookUpField } from "./lookup/LookUpField";
+export type {
+  LookUpFieldProps,
+  LookUpResultado,
+  LookupBanco,
+  LookupBase,
+  LookupCodigo,
+  LookupColunaGrid,
+  LookupDefinicao,
+  LookupEnabled,
+  LookupLinha,
+  LookupMascaraGrid,
+  LookupOperador,
+  LookupTipoConsulta,
+  LookupTipoRefreshGrid,
+  LookupTipoValor,
+} from "./lookup/lookup.types";

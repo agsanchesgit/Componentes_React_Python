@@ -29,6 +29,13 @@ Frontend (`cd frontend`):
 | `npm run build` | gera `dist\` (ESM + `.d.ts` + `estilos.css`) |
 | `npm run exemplos` | sobe o app de exemplos |
 
+Exemplo completo (front + API Python de exemplo, com o `LookUpField`):
+
+```powershell
+cd backend;  .venv\Scripts\python -m uvicorn exemplos.api_exemplo:app --port 8100
+cd frontend; npm run exemplos        # o Vite encaminha /api para a porta 8100
+```
+
 Backend (`cd backend`):
 
 ```powershell

@@ -166,3 +166,30 @@
 .cmp-grid-paginacao { display: flex; align-items: center; gap: 8px; }
 .cmp-grid-botao-pagina { padding: 2px 8px; font-size: inherit; }
 .cmp-grid-erro { padding: 12px; color: var(--cmp-cor-erro); border: 1px solid var(--cmp-cor-erro); border-radius: var(--cmp-raio); }
+
+/* ---------------------------------------------------------------- diálogo e lookup */
+.cmp-dialogo-fundo { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgb(0 0 0 / 0.45); }
+.cmp-dialogo { box-sizing: border-box; max-height: calc(100vh - 2rem); display: flex; flex-direction: column; gap: 12px; padding: 16px; font-family: var(--cmp-fonte); font-size: var(--cmp-tamanho-fonte); color: var(--cmp-cor-texto); background: var(--cmp-cor-fundo); border: 1px solid var(--cmp-cor-borda); border-radius: 8px; box-shadow: 0 12px 40px rgb(0 0 0 / 0.3); outline: none; }
+.cmp-dialogo-titulo { margin: 0; padding-bottom: 12px; font-size: 1.25rem; font-weight: 700; text-align: center; border-bottom: 1px solid var(--cmp-cor-borda); }
+.cmp-lk-conteudo { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.cmp-lk-filtros { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.cmp-lk-texto { flex: 1; width: 100%; }
+.cmp-lk-botao { height: 32px; padding: 0 14px; }
+.cmp-lk-mensagem { margin: 0; }
+.cmp-lk-aviso { margin: 0; opacity: 0.7; }
+.cmp-lk-aviso-pequeno { font-size: 0.85em; }
+.cmp-lk-rodape { display: flex; justify-content: flex-end; gap: 8px; }
+.cmp-lk-grid { max-height: 20rem; overflow-y: auto; overflow-x: hidden; border: 1px solid var(--cmp-cor-borda); border-radius: var(--cmp-raio); }
+.cmp-lk-tabela { width: 100%; border-collapse: collapse; }
+.cmp-lk-tabela thead { position: sticky; top: 0; background: var(--cmp-cor-desabilitado); }
+.cmp-lk-tabela th { padding: 6px 8px; font-weight: 600; }
+.cmp-lk-tabela td { padding: 6px 8px; overflow-wrap: anywhere; border-top: 1px solid var(--cmp-cor-borda); }
+.cmp-lk-tabela tbody tr { cursor: pointer; }
+.cmp-lk-tabela tbody tr:hover { background: color-mix(in srgb, var(--cmp-cor-desabilitado) 70%, transparent); }
+.cmp-lk-tabela tbody tr[data-selecionada="true"] { background: var(--cmp-cor-foco); color: #fff; font-weight: 500; }
+.cmp-destaque { padding: 0 2px; color: inherit; background: #fef08a; border-radius: 2px; }
+.cmp-lk-tabela tr[data-selecionada="true"] .cmp-destaque { color: #1f2328; }
+.cmp-lk-codigo { width: 9rem; flex-shrink: 0; }
+.cmp-lk-numero { text-align: right; }
+.cmp-lk-descricao { flex: 1; min-width: 0; background: var(--cmp-cor-desabilitado); }
+.cmp-lk-descricao-erro { color: var(--cmp-cor-erro); font-weight: 500; }

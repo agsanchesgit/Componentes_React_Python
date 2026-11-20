@@ -1,6 +1,6 @@
 """API de exemplo: o Lookup sobre uma tabela fictícia `pessoa` em SQLite (memória). Dados 100% inventados.
 
-Rodar:  uvicorn exemplos.api_exemplo:app --port 8000   (na pasta backend, com o venv ativo)
+Rodar:  uvicorn exemplos.api_exemplo:app --port 8100   (na pasta backend, com o venv ativo)
 Rotas:  POST /api/Lookup/pesquisa | /codigo | /validacao
 
 Nota SQLite: datas são texto; guarde-as como 'AAAA-MM-DD HH:MM:SS' para a comparação por faixa funcionar.
