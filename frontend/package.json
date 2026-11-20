@@ -24,7 +24,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "exemplos": "vite --config exemplos/vite.config.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepack": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18",

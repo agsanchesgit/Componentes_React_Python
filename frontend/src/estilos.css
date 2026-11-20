@@ -193,3 +193,15 @@
 .cmp-lk-numero { text-align: right; }
 .cmp-lk-descricao { flex: 1; min-width: 0; background: var(--cmp-cor-desabilitado); }
 .cmp-lk-descricao-erro { color: var(--cmp-cor-erro); font-weight: 500; }
+
+/* ---------------------------------------------------------------- carregando */
+.cmp-carregando { position: fixed; inset: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; background: rgb(0 0 0 / 0.3); backdrop-filter: blur(2px); }
+.cmp-carregando-cartao { display: flex; flex-direction: column; align-items: center; gap: 16px; min-width: 240px; padding: 24px 32px; font-family: var(--cmp-fonte); font-size: var(--cmp-tamanho-fonte); color: var(--cmp-cor-texto); background: var(--cmp-cor-fundo); border-radius: 12px; box-shadow: 0 12px 40px rgb(0 0 0 / 0.3); }
+.cmp-carregando-logo { display: flex; justify-content: center; max-width: 180px; }
+.cmp-carregando-logo img, .cmp-carregando-logo svg { max-width: 100%; height: auto; }
+.cmp-carregando-giro { width: 56px; height: 56px; border: 6px solid color-mix(in srgb, var(--cmp-cor-foco) 20%, transparent); border-top-color: var(--cmp-cor-foco); border-radius: 50%; animation: cmp-giro 1s linear infinite; }
+.cmp-carregando-texto { text-align: center; }
+.cmp-carregando-mensagem { font-weight: 500; }
+.cmp-carregando-tempo { margin-top: 4px; font-size: 0.85em; font-variant-numeric: tabular-nums; opacity: 0.65; }
+@keyframes cmp-giro { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .cmp-carregando-giro { animation-duration: 3s; } }

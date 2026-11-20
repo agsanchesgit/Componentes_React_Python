@@ -47,3 +47,6 @@ export type {
   LookupTipoRefreshGrid,
   LookupTipoValor,
 } from "./lookup/lookup.types";
+
+export { Carregando } from "./carregamento/Carregando";
+export type { CarregandoProps } from "./carregamento/Carregando";
