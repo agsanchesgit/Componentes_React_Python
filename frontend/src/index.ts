@@ -25,3 +25,7 @@ export type {
   DataHoraFieldProps,
   MmAaaaFieldProps,
 } from "./campos/campos.types";
+
+export { GridField } from "./grid/GridField";
+export { GRID_MAX_LINHAS } from "./grid/grid";
+export type { GridAcao, GridColuna, GridFieldProps, GridLinha, GridOrdem, GridTipo } from "./grid/grid.types";

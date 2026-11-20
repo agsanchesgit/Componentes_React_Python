@@ -5,6 +5,9 @@ import {
   CpfField,
   DataField,
   DataHoraField,
+  GridField,
+  type GridColuna,
+  type GridLinha,
   MIN_DATE,
   MmAaaaField,
   type CampoResultado,
@@ -20,6 +23,23 @@ function Secao({ titulo, resultado, children }: { titulo: string; resultado: unk
     </section>
   );
 }
+
+const COLUNAS: GridColuna[] = [
+  { coluna: "cd_pessoa", tipo: "numero", largura: 8 },
+  { coluna: "nm_pessoa", tipo: "texto", larguraMax: 18 },
+  { coluna: "dt_nascimento", tipo: "data" },
+  { coluna: "nr_cpf", tipo: "texto", mascara: "ZZZ.ZZZ.ZZZ-ZZ" },
+  { coluna: "ativo", tipo: "logico" },
+];
+const CABECALHOS = ["Código", "Nome", "Nascimento", "CPF", "Ativo"];
+const NOMES = ["Ana Souza", "bruno Lima", "Carla Dias", "Davi Rocha", "Elisa Prado", "Fábio Nunes", "Gabriela Torres"];
+const PESSOAS: GridLinha[] = Array.from({ length: 23 }, (_, i) => ({
+  cd_pessoa: i + 1,
+  nm_pessoa: `${NOMES[i % NOMES.length]} ${i + 1}`,
+  dt_nascimento: i % 5 === 0 ? "0001-01-01T00:00:00" : `19${70 + (i % 30)}-0${(i % 9) + 1}-1${i % 9}T00:00:00`,
+  nr_cpf: String(52998224725 - i),
+  ativo: i % 3 === 0 ? "S" : "N",
+}));
 
 export function App() {
   const [wData, prcDefinirData] = useState<Date>(MIN_DATE);
@@ -38,7 +58,7 @@ export function App() {
     <main style={{ fontFamily: "var(--cmp-fonte)", padding: 24, display: "grid", gap: 16, maxWidth: 720 }}>
       <h1 style={{ margin: 0 }}>Componentes React + Python</h1>
       <p style={{ margin: 0 }}>
-        Campos (Fase 2). Teclas: <b>Enter/↓</b> próximo, <b>↑</b> anterior, <b>F4</b> abre o painel. Texto inválido bloqueia a saída.
+        Campos (Fase 2) e Grid (Fase 3). Teclas: <b>Enter/↓</b> próximo, <b>↑</b> anterior, <b>F4</b> abre o painel. Texto inválido bloqueia a saída.
       </p>
 
       <Secao titulo="DataField" resultado={wUltimo.data}>
@@ -110,6 +130,22 @@ export function App() {
             prcRegistrar("uf", r);
           }}
         />
+      </Secao>
+
+      <Secao titulo="GridField" resultado={wUltimo.grid}>
+        <GridField
+          colunas={COLUNAS}
+          cabecalhos={CABECALHOS}
+          dados={PESSOAS}
+          linhasPorPagina={8}
+          onLinhaPosicionada={(l) => prcRegistrar("grid", { posicionada: l })}
+          onLinhaAcionada={(l) => prcRegistrar("grid", { acionada: l })}
+          onLinhaContexto={(l) => prcRegistrar("grid", { contexto: l })}
+          corLinha={(l) => (l.ativo === "N" ? undefined : "rgb(220 252 231 / 0.6)")}
+          detalhe={(l) => <span>Detalhe de {String(l.nm_pessoa)}</span>}
+          acoes={[{ rotulo: "Editar", icone: "✎", aoClicar: (l) => prcRegistrar("grid", { acao: "Editar", linha: l }) }]}
+        />
+        <small>Clique no cabeçalho adiciona à ordem; duplo clique reinicia. Duplo clique/Enter/F4 na linha aciona.</small>
       </Secao>
     </main>
   );

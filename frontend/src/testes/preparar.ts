@@ -2,3 +2,6 @@
 HTMLElement.prototype.getClientRects = function getClientRects(): DOMRectList {
   return [{}] as unknown as DOMRectList;
 };
+
+// O jsdom não implementa scrollIntoView (o GridField o usa para manter a linha atual visível).
+Element.prototype.scrollIntoView = function scrollIntoView(): void {};
