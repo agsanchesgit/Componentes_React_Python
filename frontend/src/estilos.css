@@ -1,0 +1,21 @@
+/* Tema da biblioteca: o projeto consumidor sobrescreve só estas variáveis. */
+:root {
+  --cmp-cor-fundo: #ffffff;
+  --cmp-cor-texto: #1f2328;
+  --cmp-cor-borda: #c4c9d0;
+  --cmp-cor-foco: #2563eb;
+  --cmp-cor-erro: #d92d20;
+  --cmp-cor-desabilitado: #f2f4f7;
+  --cmp-raio: 4px;
+  --cmp-fonte: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cmp-tamanho-fonte: 14px;
+}
+
+:root[data-tema="escuro"] {
+  --cmp-cor-fundo: #1b1f24;
+  --cmp-cor-texto: #e6e8eb;
+  --cmp-cor-borda: #3d444d;
+  --cmp-cor-foco: #6ea8fe;
+  --cmp-cor-erro: #ff7b72;
+  --cmp-cor-desabilitado: #262c33;
+}
