@@ -58,6 +58,7 @@
 }
 /* Campo numérico: texto à direita e, com percentual, o % fixo dentro do campo. */
 .cmp-entrada-direita { text-align: right; }
+.cmp-entrada[data-caixa="minuscula"] { text-transform: lowercase; }
 .cmp-entrada-com-sufixo { padding-right: 1.6em; }
 .cmp-sufixo-fixo {
   position: absolute;

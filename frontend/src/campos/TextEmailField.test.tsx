@@ -98,6 +98,11 @@ describe("TextEmailField", () => {
     expect(screen.queryByRole("alert")).toBeNull();
   });
 
+  it("o campo se declara minúsculo (data-caixa), para o projeto não forçar maiúsculas", () => {
+    render(<TextEmailField label="E-mail" value="" onChange={vi.fn()} />);
+    expect((screen.getByLabelText("E-mail") as HTMLInputElement).dataset.caixa).toBe("minuscula");
+  });
+
   it("mostra em minúsculas um valor que veio em maiúsculas de fora", () => {
     render(<TextEmailField label="E-mail" value="LUCAS@EXEMPLO.COM" onChange={vi.fn()} />);
     expect((screen.getByLabelText("E-mail") as HTMLInputElement).value).toBe("lucas@exemplo.com");

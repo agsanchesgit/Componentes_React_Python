@@ -54,6 +54,8 @@ export interface CampoEntradaProps {
   inputMode?: "text" | "numeric" | "decimal" | "email";
   /** Seleciona o texto todo ao receber o foco (o que se digita substitui o valor). Padrão: false. */
   selecionarAoFocar?: boolean;
+  /** Caixa do texto: `minuscula` marca o campo (`data-caixa`) para o projeto não forçar maiúsculas por CSS ou script. */
+  caixa?: "minuscula";
 }
 
 /**
@@ -83,6 +85,7 @@ export function CampoEntrada({
   sufixoFixo,
   inputMode = "text",
   selecionarAoFocar = false,
+  caixa,
 }: CampoEntradaProps) {
   const wAcaoRef = useRef<HTMLSpanElement>(null);
   const wIdGerado = useId();
@@ -220,6 +223,7 @@ export function CampoEntrada({
             aria-describedby={wMensagem ? wMensagemId : undefined}
             autoComplete="off"
             inputMode={inputMode}
+            data-caixa={caixa}
             onFocus={(evento) => {
               prcDefinirFocado(true);
               if (selecionarAoFocar) {

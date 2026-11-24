@@ -47,6 +47,7 @@ export function TextEmailField({
       validar={(wTexto) => (aceitaInvalido || fncEmailValido(wTexto) ? null : "E-mail inválido")}
       onResolver={prcAoResolver}
       inputMode="email"
+      caixa="minuscula"
     />
   );
 }
