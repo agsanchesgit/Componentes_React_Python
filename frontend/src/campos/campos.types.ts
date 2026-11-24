@@ -83,3 +83,22 @@ export interface ComboFieldProps extends CampoBaseProps {
   /** Pode sair vazio. Padrão: false (sem `value` válido, começa no 1º item). */
   permiteVazio?: boolean;
 }
+
+/** `valor` é o número (0 quando vazio; use `vazio` para distinguir do zero digitado). */
+export interface TextNumericoFieldProps extends CampoBaseProps {
+  /** Valor inicial. `null` ou omitido = campo vazio. Se mudar por fora, o campo acompanha. */
+  valorInicial?: number | null;
+  onChange: (resultado: CampoResultado<number>) => void;
+  /** Máscara do `FNC_FORMATA`: `9`/`Z` = dígito, última vírgula = decimal, ponto antes dela = milhar (`"999.999,99"`, `"999,9999"`, `"999"`). */
+  mascara: string;
+  /** Mostra `%` no fim do campo. Padrão: false. */
+  percentual?: boolean;
+}
+
+/** E-mail em minúsculas, sem espaços; vazio = "". */
+export interface TextEmailFieldProps extends CampoBaseProps {
+  value: string;
+  onChange: (resultado: CampoResultado<string>) => void;
+  /** Aceita sair com e-mail de formato inválido. Padrão: false. */
+  aceitaInvalido?: boolean;
+}

@@ -4,7 +4,7 @@
 > `Leia OrientarImplementacao.md e implemente o componente <nome_componente> na tela <tal>` — por exemplo `... o componente DataField ...`.
 > **Para o Claude:** leia **(A) Regras gerais**, **(B) Preparação do projeto** e **somente a seção do componente pedido** (C). Para a lista completa de parâmetros, use o `listaComponentes.md`; para detalhes, o manual do componente em `.claude/docs/manuais/`.
 
-Nomes aceitos de `<nome_componente>`: `ComponentesProvider`, `FNC_FORMATA`, `DataField`, `DataHoraField`, `CpfField`, `CnpjField`, `MmAaaaField`, `ComboField`, `GridField`, `LookUpField`, `Carregando`, `BackendLookup`.
+Nomes aceitos de `<nome_componente>`: `ComponentesProvider`, `FNC_FORMATA`, `DataField`, `DataHoraField`, `CpfField`, `CnpjField`, `MmAaaaField`, `ComboField`, `TextNumericoField`, `TextEmailField`, `GridField`, `LookUpField`, `Carregando`, `BackendLookup`.
 
 ---
 
@@ -113,6 +113,40 @@ Igual ao C.3, com `Date` completo (data **e** hora, sempre com segundos). Difere
 3. **Decida `permiteVazio`**: padrão `false` faz o campo **emitir o 1º item na montagem** (o estado do projeto muda sozinho). Se o formulário deve começar vazio, use `permiteVazio`.
 4. Para domínios que vêm do banco/API, monte o array a partir da resposta e memorize; **não** use o `ComboField` para listas enormes (use `LookUpField`).
 **Conferir:** `Manual_ComboField.md`.
+
+### C.8.1 `TextNumericoField`
+
+**Quando usar:** qualquer valor numérico editável: quantidade, moeda, alíquota, percentual, código numérico curto.
+
+**Como:**
+1. Estado: `const [valor, setValor] = useState<number | null>(null);` (`null` = vazio; use `0` só quando o zero for um valor de verdade).
+2. Troque o `<input>` numérico atual por:
+   ```tsx
+   <TextNumericoField label="Valor" mascara="999.999,99" valorInicial={valor} onChange={(r) => setValor(r.vazio ? null : r.valor)} />
+   ```
+   Percentual: `mascara="99,99" percentual`.
+3. A máscara decide tudo: dígitos antes da vírgula, casas decimais e ponto de milhar. Escolha pelo dado (alíquota de ISS `"99,99"`, valor em reais `"999.999.999,99"`, retenção `"999,9999"`).
+4. Ao **enviar à API**: `r.valor` é `number`; envie como o backend espera (número ou texto com vírgula). Ao **receber**: passe o número em `valorInicial`; `null` da API = campo vazio.
+5. O `onChange` só dispara ao sair do campo: o clique em "Salvar" já vem depois do blur, então o estado está atualizado.
+
+**Armadilhas:** o campo é alinhado à direita por padrão; `%` não faz parte do valor; vazio e zero são diferentes (`r.vazio`); `valido` é sempre `true` (a máscara já limita os dígitos).
+**Conferir:** `Manual_TextNumericoField.md`.
+
+### C.8.2 `TextEmailField`
+
+**Quando usar:** todo campo de e-mail editável (cadastro, contato, login, troca de e-mail).
+
+**Como:**
+1. Estado: `const [email, setEmail] = useState("");` (vazio = `""`).
+2. Troque o `<input type="email">`/`<input>` de e-mail por:
+   ```tsx
+   <TextEmailField label="E-mail" value={email} onChange={(r) => { setEmail(r.valor); /* guarde r.valido */ }} />
+   ```
+3. **Não** repita regras por fora (minúsculas, trim, regex): estão no componente. `aceitaInvalido` só para dado legado.
+4. O `onChange` só dispara ao sair do campo. Confira `valido` e `obrigatorioPendente` no submit.
+
+**Armadilhas:** formato inválido bloqueia a saída do campo (como nos CPF/CNPJ); acentos não são aceitos (e-mail é ASCII); Enter move o foco em vez de enviar o formulário.
+**Conferir:** `Manual_TextEmailField.md`.
 
 ### C.9 `GridField`
 

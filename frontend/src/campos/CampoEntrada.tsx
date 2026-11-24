@@ -46,6 +46,14 @@ export interface CampoEntradaProps {
   /** Botões à direita do campo (ex.: calendário). O foco neles não dispara o bloqueio. */
   acao?: ReactNode;
   onF4?: () => void;
+  /** Alinhamento do texto no campo. Padrão: esquerda (campos numéricos usam direita). */
+  alinhamento?: "esquerda" | "direita";
+  /** Texto fixo no fim do campo, dentro dele (ex.: `%`). Não faz parte do valor. */
+  sufixoFixo?: string;
+  /** Teclado sugerido em dispositivos móveis. Padrão: text. */
+  inputMode?: "text" | "numeric" | "decimal" | "email";
+  /** Seleciona o texto todo ao receber o foco (o que se digita substitui o valor). Padrão: false. */
+  selecionarAoFocar?: boolean;
 }
 
 /**
@@ -71,6 +79,10 @@ export function CampoEntrada({
   sufixo,
   acao,
   onF4,
+  alinhamento = "esquerda",
+  sufixoFixo,
+  inputMode = "text",
+  selecionarAoFocar = false,
 }: CampoEntradaProps) {
   const wAcaoRef = useRef<HTMLSpanElement>(null);
   const wIdGerado = useId();
@@ -198,7 +210,7 @@ export function CampoEntrada({
           <input
             id={wCampoId}
             ref={inputRef}
-            className="cmp-entrada"
+            className={`cmp-entrada${alinhamento === "direita" ? " cmp-entrada-direita" : ""}${sufixoFixo ? " cmp-entrada-com-sufixo" : ""}`}
             style={{ width: `calc(${larguraCh}ch + 1.75rem)` }}
             value={wTexto}
             placeholder={placeholder}
@@ -207,12 +219,20 @@ export function CampoEntrada({
             aria-invalid={!!wMensagem}
             aria-describedby={wMensagem ? wMensagemId : undefined}
             autoComplete="off"
-            inputMode="text"
-            onFocus={() => prcDefinirFocado(true)}
+            inputMode={inputMode}
+            onFocus={(evento) => {
+              prcDefinirFocado(true);
+              if (selecionarAoFocar) {
+                const wCampo = evento.currentTarget;
+                // adiado: o clique do mouse põe o cursor depois do foco e desfaria a seleção
+                setTimeout(() => wCampo.select(), 0);
+              }
+            }}
             onChange={prcAoDigitar}
             onBlur={prcAoSair}
             onKeyDown={prcAoTeclar}
           />
+          {sufixoFixo && <span className="cmp-sufixo-fixo">{sufixoFixo}</span>}
           {wComplemento && <span className="cmp-sufixo">({wComplemento})</span>}
         </div>
         {acao && <span ref={wAcaoRef}>{acao}</span>}

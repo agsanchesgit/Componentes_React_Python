@@ -19,6 +19,8 @@
 | 7 | `CnpjField` | campo |
 | 8 | `MmAaaaField` | campo |
 | 9 | `ComboField` | campo |
+| 9.1 | `TextNumericoField` | campo |
+| 9.2 | `TextEmailField` | campo |
 | 10 | `GridField` | grid de consulta |
 | 11 | `LookUpField` + `LookupDefinicao` | campo de pesquisa (precisa do backend) |
 | 12 | `Carregando` | tela de espera |
@@ -152,6 +154,35 @@ Props comuns +
 | `permiteVazio` | `boolean` | não | `false` | `false`: sem `value` válido **emite o 1º item na montagem** e esvaziar o texto bloqueia a saída. `true`: pode ficar vazio (a lista mostra `(vazio)`) |
 
 Largura padrão: o maior item. Digitação restrita ao domínio, casa pelo começo e completa ao sair. Seta (só mouse) ou F4 abre a lista.
+
+---
+
+## 9.1 `TextNumericoField` — valor numérico (inteiro, decimal, moeda, percentual)
+
+Props comuns +
+
+| Parâmetro | Tipo | Obrig. | Padrão | Explicação |
+|---|---|---|---|---|
+| `valorInicial` | `number \| null` | não | vazio | Valor inicial. `null`/omitido = campo vazio (aqui o vazio se distingue do zero). Se mudar por fora, o campo acompanha |
+| `onChange` | `(r: CampoResultado<number>) => void` | sim | — | `r.valor` é o número (`0` quando vazio; use `r.vazio` para distinguir do zero digitado) |
+| `mascara` | `string` | sim | — | Máscara do `FNC_FORMATA`: `9`/`Z` = dígito, a **última vírgula** é o decimal, o ponto antes dela pede milhar. `"999.999,99"` (6 inteiros, 2 decimais, milhar), `"99,99"`, `"999"` (inteiro). Máscara sem dígito ou com `0` lança `Error` |
+| `percentual` | `boolean` | não | `false` | `true` mostra `%` no fim do campo (não entra no valor) |
+
+Largura padrão: o tamanho da máscara. O texto fica **alinhado à direita** e, ao receber o foco, o valor fica selecionado. Digita-se a parte inteira; `,` ou `.` passa para a parte fracionária (uma só vez). Enquanto digita só há dígitos e a vírgula; **ao sair** completa as casas decimais e põe o ponto de milhar (`1234,5` → `1.234,50`). Excesso de dígitos e letras são ignorados. Comportamento comum dos campos: ver §3.
+
+---
+
+## 9.2 `TextEmailField` — e-mail
+
+Props comuns +
+
+| Parâmetro | Tipo | Obrig. | Padrão | Explicação |
+|---|---|---|---|---|
+| `value` | `string` | sim | — | E-mail. Vazio = `""`. Se vier em maiúsculas, é mostrado em minúsculas |
+| `onChange` | `(r: CampoResultado<string>) => void` | sim | — | `r.valor` é o e-mail em minúsculas; vazio = `""` |
+| `aceitaInvalido` | `boolean` | não | `false` | `true` deixa sair com formato inválido (dado antigo/legado) |
+
+Largura padrão 40; placeholder `nome@dominio.com.br`. **Regras (todas dentro do componente):** tudo em minúsculas, sem espaços, só caracteres permitidos em e-mail (sem acento), um só `@` (os seguintes são descartados), até 254 caracteres no total e 64 antes do `@`. Ao sair confere o formato (`parte@dominio.ext`, sem pontos seguidos nem no início/fim da parte local, domínio com ponto): inválido mostra `E-mail inválido`, deixa o campo vermelho e não deixa sair. Vazio nunca bloqueia. Comportamento comum dos campos: ver §3.
 
 ---
 

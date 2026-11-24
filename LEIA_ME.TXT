@@ -16,7 +16,7 @@ usar a biblioteca em um projeto:
  1) listaComponentes.md  -  O QUE EXISTE
 ---------------------------------------------------------------------
 E o catalogo. Lista TODOS os componentes (DataField, DataHoraField,
-CpfField, CnpjField, MmAaaaField, ComboField, GridField, LookUpField,
+CpfField, CnpjField, MmAaaaField, ComboField, TextNumericoField, TextEmailField, GridField, LookUpField,
 Carregando, ComponentesProvider, FNC_FORMATA e o backend do Lookup) e,
 para cada um, TODOS os parametros, com tipo, se e obrigatorio, valor
 padrao e uma explicacao de cada parametro.
@@ -51,7 +51,7 @@ a preparacao e SOMENTE a secao daquele componente.
      BackendLookup no nosso FastAPI."
 
   Nomes validos: ComponentesProvider, FNC_FORMATA, DataField,
-  DataHoraField, CpfField, CnpjField, MmAaaaField, ComboField, GridField,
+  DataHoraField, CpfField, CnpjField, MmAaaaField, ComboField, TextNumericoField, TextEmailField, GridField,
   LookUpField, Carregando, BackendLookup.
 
 ---------------------------------------------------------------------

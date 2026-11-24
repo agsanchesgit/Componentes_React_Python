@@ -20,6 +20,8 @@ describe("API pública (index.ts)", () => {
         "LookUpField",
         "MIN_DATE",
         "MmAaaaField",
+        "TextEmailField",
+        "TextNumericoField",
         "useComponentesApi",
         "useComponentesCaminhoLookup",
       ].sort(),
@@ -27,7 +29,7 @@ describe("API pública (index.ts)", () => {
   });
 
   it("os componentes são funções e as constantes têm o valor esperado", () => {
-    for (const wNome of ["Carregando", "CnpjField", "ComboField", "CpfField", "DataField", "DataHoraField", "GridField", "LookUpField", "MmAaaaField"] as const) {
+    for (const wNome of ["Carregando", "CnpjField", "ComboField", "CpfField", "DataField", "DataHoraField", "GridField", "LookUpField", "MmAaaaField", "TextEmailField", "TextNumericoField"] as const) {
       expect(typeof api[wNome]).toBe("function");
     }
     expect(api.GRID_MAX_LINHAS).toBe(3000);

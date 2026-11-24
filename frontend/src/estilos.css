@@ -56,6 +56,17 @@
   pointer-events: none;
   opacity: 0.65;
 }
+/* Campo numérico: texto à direita e, com percentual, o % fixo dentro do campo. */
+.cmp-entrada-direita { text-align: right; }
+.cmp-entrada-com-sufixo { padding-right: 1.6em; }
+.cmp-sufixo-fixo {
+  position: absolute;
+  inset: 0 8px 0 auto;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0.65;
+}
 .cmp-erro { color: var(--cmp-cor-erro); font-weight: 500; }
 
 .cmp-botao {

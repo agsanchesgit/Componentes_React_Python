@@ -12,6 +12,8 @@ export { CpfField } from "./campos/CpfField";
 export { CnpjField } from "./campos/CnpjField";
 export { MmAaaaField } from "./campos/MmAaaaField";
 export { ComboField } from "./campos/ComboField";
+export { TextNumericoField } from "./campos/TextNumericoField";
+export { TextEmailField } from "./campos/TextEmailField";
 export type {
   CampoBaseProps,
   CampoEnabled,
@@ -24,6 +26,8 @@ export type {
   DataFieldProps,
   DataHoraFieldProps,
   MmAaaaFieldProps,
+  TextEmailFieldProps,
+  TextNumericoFieldProps,
 } from "./campos/campos.types";
 
 export { GridField } from "./grid/GridField";
