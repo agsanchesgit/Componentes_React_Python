@@ -124,7 +124,7 @@ class ServicoLookup:
         wDefinicao = self._fncDefinicao(req.definicao, usuario)
         wCriterios = fncNormalizar(req)
 
-        wLinhas = self._fncExecutar(wDefinicao, sql_builder.fncPesquisa(wDefinicao, wCriterios))
+        wLinhas = self._fncExecutar(wDefinicao, sql_builder.fncPesquisa(wDefinicao, wCriterios), usuario)
 
         wAtingido = len(wLinhas) > wDefinicao.qtde_linhas
         if wAtingido:
@@ -138,7 +138,7 @@ class ServicoLookup:
         if wConvertido is None:
             return LookupCodigoResponse(situacao="NAO_ENCONTRADO")
 
-        wLinhas = self._fncExecutar(wDefinicao, sql_builder.fncCodigo(wDefinicao, wConvertido))
+        wLinhas = self._fncExecutar(wDefinicao, sql_builder.fncCodigo(wDefinicao, wConvertido), usuario)
         if len(wLinhas) == 0:
             return LookupCodigoResponse(situacao="NAO_ENCONTRADO")
         if len(wLinhas) == 1:
@@ -177,14 +177,17 @@ class ServicoLookup:
             raise ErroAcessoNegado("Acesso negado a esta consulta")
         return definicao
 
-    def _fncExecutar(self, d: LookupDefinicao, consulta: LookupConsulta) -> list[dict[str, Any]]:
+    def _fncExecutar(self, d: LookupDefinicao, consulta: LookupConsulta, usuario: Any = None) -> list[dict[str, Any]]:
         wDialeto = fncObterDialeto(d.banco)
         wParametros = consulta.fncParametrosParaDriver(wDialeto)
         # Nome devolvido pelo banco (Oracle: maiúsculas; PostgreSQL: minúsculas) -> nome como foi configurado.
         wNomes = {c.casefold(): c for c in sql_builder.fncColunasDoSelect(d)}
 
         try:
-            wConexao = self._config.obter_conexao(d.banco.value)
+            if self._config.obter_conexao_do_usuario is not None:
+                wConexao = self._config.obter_conexao_do_usuario(d.banco.value, usuario, d)
+            else:
+                wConexao = self._config.obter_conexao(d.banco.value)  # type: ignore[misc]
             try:
                 wCursor = wConexao.cursor()
                 try:

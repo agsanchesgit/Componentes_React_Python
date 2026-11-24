@@ -315,3 +315,42 @@ def test_data_do_banco_sai_em_iso(servico):
     assert wLinha["VL_RENDA"] == 10.5
 
     assert date(1980, 5, 10).isoformat() in wLinha["DT_NASCIMENTO"]
+
+
+def test_obter_conexao_do_usuario_recebe_usuario_e_definicao(servico):
+    wRecebidos = []
+    wAntiga = servico._config.obter_conexao
+
+    def fncConexaoUsuario(banco, usuario, definicao):
+        wRecebidos.append((banco, usuario, definicao.chave))
+        return wAntiga(banco)
+
+    wServico = ServicoLookup(ConfiguracaoLookup(obter_conexao_do_usuario=fncConexaoUsuario, permitir_anonimo=True))
+    assert wServico.pesquisar(LookupPesquisaRequest(definicao=fncDefinicao(), texto="ana"), "admin").linhas
+    assert wServico.buscar_por_codigo(LookupCodigoRequest(definicao=fncDefinicao(), valor="1"), "outro").situacao == (
+        "ENCONTRADO"
+    )
+    assert [(u, c) for _, u, c in wRecebidos] == [("admin", "pessoa"), ("outro", "pessoa")]
+
+
+def test_obter_conexao_do_usuario_tem_precedencia_sobre_obter_conexao(servico):
+    wChamadas = []
+
+    def fncAntiga(banco):
+        wChamadas.append("antiga")
+        return servico._config.obter_conexao(banco)
+
+    def fncNova(banco, usuario, definicao):
+        wChamadas.append("nova")
+        return servico._config.obter_conexao(banco)
+
+    wServico = ServicoLookup(
+        ConfiguracaoLookup(obter_conexao=fncAntiga, obter_conexao_do_usuario=fncNova, permitir_anonimo=True)
+    )
+    wServico.pesquisar(LookupPesquisaRequest(definicao=fncDefinicao(), texto="ana"))
+    assert wChamadas == ["nova"]
+
+
+def test_configuracao_exige_alguma_funcao_de_conexao():
+    with pytest.raises(ValueError, match="obter_conexao"):
+        ConfiguracaoLookup(permitir_anonimo=True)

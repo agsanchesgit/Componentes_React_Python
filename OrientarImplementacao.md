@@ -199,6 +199,7 @@ Igual ao C.3, com `Date` completo (data **e** hora, sempre com segundos). Difere
 1. **Já existe FastAPI no projeto?** Se não, pare e pergunte (não crie backend novo sem pedido).
 2. Instale no ambiente do projeto: `pip install <caminho>\Componentes_React_Python\backend` (ou `-e`), o **driver do banco** (`oracledb`, `pyodbc` ou `psycopg[binary]`) e `uvicorn` se necessário. Veja `Manual_Instalacao.md` §2.
 3. Escreva `obter_conexao(banco: str)` **reutilizando a conexão/pool que o projeto já tem**; não crie credenciais novas nem as escreva no código (use a configuração do projeto). A biblioteca chama `close()` na conexão.
+   - Se a tabela consultada tem RLS por tenant (ou a conexão depende de quem consulta), use `obter_conexao_do_usuario(banco, usuario, definicao)`: recebe o usuário autenticado e a definição, e tem precedência sobre `obter_conexao`.
 4. Reaproveite a **dependência de autenticação existente** do projeto em `dependencia_autenticacao` (JWT/sessão). `permitir_anonimo=True` **só em teste**.
 5. Inclua o roteador: `app.include_router(criar_roteador_lookup(ConfiguracaoLookup(...)), prefix="/api/Lookup")` — alinhado com a `baseURL` do front.
 6. **Segurança**: o Lookup consulta qualquer tabela visível ao usuário de banco. Recomende ao analista um usuário **só com SELECT**; ofereça `tabelas_permitidas`/`autorizar` se o projeto quiser restringir.

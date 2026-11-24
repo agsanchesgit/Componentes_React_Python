@@ -18,6 +18,11 @@ class ConfiguracaoLookup:
         `(banco: str) -> conexão DB-API` para o banco pedido ("ORACLE", "SQL_SERVER", "POSTGRESQL").
         Chamada uma vez por requisição; a biblioteca chama `close()` ao terminar (com pool, devolva um
         objeto cujo `close()` devolve a conexão ao pool).
+    obter_conexao_do_usuario:
+        Opcional: `(banco: str, usuario, definicao: LookupDefinicao) -> conexão DB-API`. Quando informada, **tem
+        precedência** sobre `obter_conexao` e recebe o usuário autenticado e a definição da consulta (útil para
+        tabelas com RLS por tenant: o projeto define o contexto do tenant na conexão). Com ela, `obter_conexao`
+        pode ser omitida. A biblioteca também chama `close()` ao terminar.
     dependencia_autenticacao:
         Dependência do FastAPI que exige usuário logado (padrão do Nexus: [Authorize]). O valor que ela
         devolve é entregue ao gancho `autorizar` como `usuario`. Obrigatória, a menos que `permitir_anonimo=True`.
@@ -35,9 +40,14 @@ class ConfiguracaoLookup:
         `None`: detecta pela hierarquia DB-API (`Error`) de qualquer driver.
     """
 
-    obter_conexao: Callable[[str], Any]
+    obter_conexao: Callable[[str], Any] | None = None
     dependencia_autenticacao: Callable[..., Any] | None = None
     permitir_anonimo: bool = False
     tabelas_permitidas: Collection[str] | None = None
     autorizar: Callable[[LookupDefinicao, Any], bool] | None = None
     tipos_erro_banco: tuple[type[BaseException], ...] | None = None
+    obter_conexao_do_usuario: Callable[[str, Any, LookupDefinicao], Any] | None = None
+
+    def __post_init__(self) -> None:
+        if self.obter_conexao is None and self.obter_conexao_do_usuario is None:
+            raise ValueError("Informe obter_conexao ou obter_conexao_do_usuario")

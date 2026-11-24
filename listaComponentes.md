@@ -339,6 +339,7 @@ app.include_router(criar_roteador_lookup(ConfiguracaoLookup(...)), prefix="/api/
 | Parâmetro | Tipo | Obrig. | Padrão | Explicação |
 |---|---|---|---|---|
 | `obter_conexao` | `(banco: str) -> conexão DB-API` | sim | — | Devolve uma conexão do banco pedido (`"ORACLE"`, `"SQL_SERVER"`, `"POSTGRESQL"`). Chamada 1x por requisição; a biblioteca chama `close()` (com pool, devolva um proxy cujo `close()` devolve ao pool). A biblioteca não cria pool nem lê credenciais |
+| `obter_conexao_do_usuario` | `(banco: str, usuario, definicao) -> conexão DB-API` | não | `None` | Alternativa a `obter_conexao` que recebe o usuário autenticado e a definição da consulta (para tabelas com RLS por tenant: o projeto define o contexto do tenant na conexão). Se informada, **tem precedência** sobre `obter_conexao` (que pode então ser omitida). A biblioteca chama `close()` ao terminar |
 | `dependencia_autenticacao` | dependência do FastAPI | sim* | `None` | Exige usuário logado; o valor devolvido vai ao gancho `autorizar`. *Obrigatória, a menos que `permitir_anonimo=True` (senão `criar_roteador_lookup` lança `ValueError`) |
 | `permitir_anonimo` | `bool` | não | `False` | Libera sem autenticação. **Só exemplos e testes** |
 | `tabelas_permitidas` | `Collection[str]` | não | `None` | Lista de tabelas liberadas (sem diferenciar maiúsculas). `None` = sem restrição. Com lista, só `base=TABELA` com nome na lista passa; `base=SELECT` é recusado (403) |

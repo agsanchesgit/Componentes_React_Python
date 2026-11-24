@@ -46,6 +46,7 @@ app.include_router(
 | Campo | Descrição |
 |---|---|
 | `obter_conexao(banco)` | **Obrigatório.** Devolve uma conexão DB-API do banco pedido. Chamada uma vez por requisição; a biblioteca chama `close()` ao terminar (com pool, devolva um objeto cujo `close()` devolve ao pool). A biblioteca **não** cria pool nem lê credenciais |
+| `obter_conexao_do_usuario(banco, usuario, definicao)` | Opcional. Como `obter_conexao`, mas recebe o usuário autenticado e a `LookupDefinicao` da consulta (pesquisa e busca por código). Tem **precedência** sobre `obter_conexao`; com ela, `obter_conexao` pode ser omitida. Use para tabelas com RLS por tenant: defina o contexto do tenant na conexão (na mesma transação da consulta) e devolva-a; a biblioteca chama `close()` |
 | `dependencia_autenticacao` | Dependência do FastAPI que exige usuário logado (equivale ao `[Authorize]` do Nexus). O valor que ela devolve vai ao gancho `autorizar` como `usuario`. **Obrigatória**, a menos que `permitir_anonimo=True` (sem nenhum dos dois, `criar_roteador_lookup` lança `ValueError`) |
 | `permitir_anonimo` | Só para exemplos e testes |
 | `tabelas_permitidas` | Conjunto opcional de tabelas liberadas (sem diferenciar maiúsculas). Padrão `None` = sem restrição (igual ao Nexus). Com lista, só `base = TABELA` com nome na lista passa; `base = SELECT` é recusado (403) |
