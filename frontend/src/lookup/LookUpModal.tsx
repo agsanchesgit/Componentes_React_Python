@@ -103,7 +103,9 @@ function Conteudo({
   const wTemDt = !!definicao.colunaDtNascto;
   const wTemCpf = !!definicao.colunaCpf;
   const wTemCnpj = !!definicao.colunaCnpj;
-  const wMinimo = Math.max(qtdMinimaCaracterBusca, MINIMO_BACKEND);
+  const wPesquisaAoAbrir = !!definicao.pesquisarAoAbrir;
+  // Com a pesquisa ao abrir não há mínimo: qualquer texto filtra e o vazio lista tudo.
+  const wMinimo = wPesquisaAoAbrir ? 0 : Math.max(qtdMinimaCaracterBusca, MINIMO_BACKEND);
 
   const [wTexto, prcDefinirTexto] = useState("");
   const [wDt, prcDefinirDt] = useState<Date>(MIN_DATE);
@@ -130,11 +132,11 @@ function Conteudo({
     [],
   );
 
-  /** Monta os critérios: o texto só entra a partir do mínimo; sem nenhum critério, não pesquisa. */
+  /** Monta os critérios: o texto só entra a partir do mínimo; sem nenhum critério, só pesquisa com `pesquisarAoAbrir`. */
   function fncCriterios(filtros: Filtros): LookupCriteriosEnvio | null {
     const wCriterios: LookupCriteriosEnvio = {};
     const wTextoLimpo = filtros.texto.trim();
-    if (wTextoLimpo.length >= wMinimo) {
+    if (wTextoLimpo.length >= Math.max(wMinimo, 1)) {
       wCriterios.texto = wTextoLimpo;
     }
     const wData = fncLimiteOuNulo(filtros.dt);
@@ -147,7 +149,7 @@ function Conteudo({
     if (filtros.cnpj) {
       wCriterios.cnpj = filtros.cnpj;
     }
-    return Object.keys(wCriterios).length ? wCriterios : null;
+    return wPesquisaAoAbrir || Object.keys(wCriterios).length ? wCriterios : null;
   }
 
   async function prcExecutar(filtros: Filtros): Promise<void> {
@@ -184,6 +186,15 @@ function Conteudo({
   }
 
   const wAtuais: Filtros = { texto: wTexto, dt: wDt, cpf: wCpf, cnpj: wCnpj };
+
+  // O conteúdo é montado a cada abertura: é aqui que o modal já abre listando.
+  useEffect(() => {
+    if (wPesquisaAoAbrir) {
+      void prcExecutar(wAtuais);
+    }
+    // só na abertura
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function prcAoDigitarTexto(valor: string): void {
     prcDefinirTexto(valor);
@@ -284,7 +295,7 @@ function Conteudo({
             className="cmp-entrada cmp-lk-texto"
             value={wTexto}
             autoComplete="off"
-            placeholder={`Mínimo de ${wMinimo} caracteres`}
+            placeholder={wPesquisaAoAbrir ? "Digite para filtrar" : `Mínimo de ${wMinimo} caracteres`}
             onChange={(e) => prcAoDigitarTexto(e.target.value.toUpperCase())}
           />
           {tipoRefreshGrid === "COM_BOTAO_PESQUISA" && (

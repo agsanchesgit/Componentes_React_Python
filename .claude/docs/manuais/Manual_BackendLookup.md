@@ -70,6 +70,7 @@ As chaves de cada linha em `linhas` são **as colunas como foram configuradas** 
 - **Texto**: separado em palavras; cada palavra vira `UPPER(col) LIKE UPPER(:p) ESCAPE '\'` (com `%`, `_` e `\` digitados escapados). Palavras na mesma coluna combinam com `operadorNaColuna` (padrão AND); colunas combinam com `operadorEntreColunas` (padrão OR).
 - **`POR_ORDEM_ALFABETICA`**: `UPPER(col) >= UPPER(:texto)`, ordenado pela coluna; só 1 coluna base.
 - **Mínimo de 3 caracteres** quando a pesquisa é **só** por texto (piso do backend). Com CPF, CNPJ ou data, o texto pode ser menor.
+- **Pesquisa ao abrir** (opcional): com `definicao.pesquisarAoAbrir` **e** `ConfiguracaoLookup.permitir_pesquisa_ao_abrir(definicao, usuario)` devolvendo `True`, a pesquisa aceita nenhum critério e texto de qualquer tamanho (o teto de linhas continua). A definição vem do front, por isso a liberação é do projeto. Ex.: `permitir_pesquisa_ao_abrir=lambda d, u: d.nome_tabela == "tomadores"`.
 - **CPF/CNPJ** chegam com ou sem máscara e são completados com zeros (11/14). O CNPJ aceita letras (alfanumérico). A consulta aceita também o valor gravado sem zeros à esquerda (`col = :p OR col = :pSz`).
 - **Data de nascimento**: faixa `[dia, dia+1)`, então pega registros com hora.
 - **Código**: convertido para o tipo da coluna (`NUMERO` aceita `12` e `12.5`, não `1,5`; `DATA` aceita `yyyy-MM-dd` e `dd/MM/yyyy`); inválido = `NAO_ENCONTRADO`. Busca no máximo 2 linhas para detectar `MAIS_DE_UM`.

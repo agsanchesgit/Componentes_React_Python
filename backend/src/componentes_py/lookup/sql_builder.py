@@ -25,6 +25,8 @@ class LookupCriterios:
     dt_nascto: date | datetime | None = None
     cpf: str | None = None
     cnpj: str | None = None
+    # Pesquisa ao abrir, liberada pelo projeto: pode vir sem nenhum critério.
+    sem_criterio_liberado: bool = False
 
 
 @dataclass(frozen=True)
@@ -155,7 +157,7 @@ def fncPesquisa(d: LookupDefinicao, c: LookupCriterios) -> LookupConsulta:
         wFim = wColetor.fncReferenciar("pDtMais1")
         wCondicoes.append(f"({d.coluna_dt_nascto} >= {wInicio} AND {d.coluna_dt_nascto} < {wFim})")
 
-    if not wCondicoes:
+    if not wCondicoes and not c.sem_criterio_liberado:
         raise ValueError("Pesquisa sem nenhum critério.")
 
     wFiltro = _fncCondicaoFiltro(d, wDialeto)
@@ -170,7 +172,8 @@ def fncPesquisa(d: LookupDefinicao, c: LookupCriterios) -> LookupConsulta:
         wOrderBy = []
 
     # n+1 para saber se o limite foi atingido
-    wSql = _fncMontar(d, wDialeto, " AND ".join(wCondicoes), wOrderBy, d.qtde_linhas + 1)
+    # sem critério nem filtro fixo, o WHERE precisa de uma condição neutra
+    wSql = _fncMontar(d, wDialeto, " AND ".join(wCondicoes) or "1 = 1", wOrderBy, d.qtde_linhas + 1)
     return LookupConsulta(wSql, wColetor.parametros, wColetor.ordem)
 
 

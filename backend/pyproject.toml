@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "componentes_py"
-version = "0.0.1"
+version = "0.0.2"
 description = "Backend dos componentes reutilizáveis (Lookup) para projetos FastAPI"
 requires-python = ">=3.11"
 dependencies = [

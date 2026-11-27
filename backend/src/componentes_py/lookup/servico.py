@@ -53,8 +53,11 @@ def _fncDocumento(valor: str | None, nome: str, tamanho: int, alfanumerico: bool
     return wMantidos.rjust(tamanho, "0")
 
 
-def fncNormalizar(req: LookupPesquisaRequest) -> LookupCriterios:
-    """Valida e normaliza a requisição: CPF vira string de 11 dígitos e CNPJ de 14, com zeros à esquerda."""
+def fncNormalizar(req: LookupPesquisaRequest, sem_minimo: bool = False) -> LookupCriterios:
+    """Valida e normaliza a requisição: CPF vira string de 11 dígitos e CNPJ de 14, com zeros à esquerda.
+
+    `sem_minimo` (pesquisa ao abrir, liberada pelo projeto) aceita requisição sem critério e texto de qualquer tamanho.
+    """
     wDefinicao = req.definicao
     wTexto = req.texto.strip() if req.texto and req.texto.strip() else None
     wCpf = _fncDocumento(req.cpf, "CPF", 11)
@@ -70,7 +73,7 @@ def fncNormalizar(req: LookupPesquisaRequest) -> LookupCriterios:
         except ValueError:
             raise ErroNegocio("Data de nascimento inválida. Use o formato yyyy-MM-dd") from None
 
-    if wTexto is None and wCpf is None and wCnpj is None and wData is None:
+    if not sem_minimo and wTexto is None and wCpf is None and wCnpj is None and wData is None:
         raise ErroNegocio("Informe ao menos um critério de pesquisa")
 
     if wCpf is not None and wDefinicao.coluna_cpf is None:
@@ -81,10 +84,10 @@ def fncNormalizar(req: LookupPesquisaRequest) -> LookupCriterios:
         raise ErroNegocio("O Lookup não possui filtro de data de nascimento")
 
     wSoTexto = wTexto is not None and wCpf is None and wCnpj is None and wData is None
-    if wSoTexto and wTexto is not None and len(wTexto) < MINIMO_CARACTERES_TEXTO:
+    if not sem_minimo and wSoTexto and wTexto is not None and len(wTexto) < MINIMO_CARACTERES_TEXTO:
         raise ErroNegocio(f"Informe ao menos {MINIMO_CARACTERES_TEXTO} caracteres para pesquisar")
 
-    return LookupCriterios(texto=wTexto, dt_nascto=wData, cpf=wCpf, cnpj=wCnpj)
+    return LookupCriterios(texto=wTexto, dt_nascto=wData, cpf=wCpf, cnpj=wCnpj, sem_criterio_liberado=sem_minimo)
 
 
 def fncConverterCodigo(tipo: LookupTipoValor, valor: str | None) -> Decimal | str | datetime | None:
@@ -122,7 +125,9 @@ class ServicoLookup:
 
     def pesquisar(self, req: LookupPesquisaRequest, usuario: Any = None) -> LookupPesquisaResponse:
         wDefinicao = self._fncDefinicao(req.definicao, usuario)
-        wCriterios = fncNormalizar(req)
+        wGancho = self._config.permitir_pesquisa_ao_abrir
+        wSemMinimo = wDefinicao.pesquisar_ao_abrir and wGancho is not None and bool(wGancho(wDefinicao, usuario))
+        wCriterios = fncNormalizar(req, wSemMinimo)
 
         wLinhas = self._fncExecutar(wDefinicao, sql_builder.fncPesquisa(wDefinicao, wCriterios), usuario)
 

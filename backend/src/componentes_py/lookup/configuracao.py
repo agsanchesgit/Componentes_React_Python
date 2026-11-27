@@ -35,6 +35,10 @@ class ConfiguracaoLookup:
         é recusado (não há como conferir as tabelas de um SELECT livre).
     autorizar:
         Gancho opcional `(definicao, usuario) -> bool`. Devolver `False` recusa a consulta (HTTP 403).
+    permitir_pesquisa_ao_abrir:
+        Gancho opcional `(definicao, usuario) -> bool`. Só quando a definição pede `pesquisar_ao_abrir` e o gancho
+        devolve `True` a pesquisa aceita nenhum critério e texto com menos de 3 caracteres (o teto `qtde_linhas`
+        continua). Padrão `None`: nunca, pois a definição vem do front e o piso protege o banco.
     tipos_erro_banco:
         Classes de exceção que são erros do banco (viram HTTP 400 com a mensagem completa do banco). Padrão
         `None`: detecta pela hierarquia DB-API (`Error`) de qualquer driver.
@@ -47,6 +51,7 @@ class ConfiguracaoLookup:
     autorizar: Callable[[LookupDefinicao, Any], bool] | None = None
     tipos_erro_banco: tuple[type[BaseException], ...] | None = None
     obter_conexao_do_usuario: Callable[[str, Any, LookupDefinicao], Any] | None = None
+    permitir_pesquisa_ao_abrir: Callable[[LookupDefinicao, Any], bool] | None = None
 
     def __post_init__(self) -> None:
         if self.obter_conexao is None and self.obter_conexao_do_usuario is None:

@@ -1,6 +1,6 @@
 {
   "name": "@componentes/react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Componentes React reutilizáveis (campos, grid, lookup)",
   "type": "module",
   "sideEffects": [

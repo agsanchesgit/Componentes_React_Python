@@ -18,14 +18,14 @@ Requisitos: Node 20+ com npm, React 18+, Python 3.11+. Em todos os exemplos abai
 ```powershell
 cd D:\Componentes_React_Python\frontend
 npm install
-npm pack --pack-destination C:\temp          # gera C:\temp\componentes-react-0.0.1.tgz (roda o build sozinho)
+npm pack --pack-destination C:\temp          # gera C:\temp\componentes-react-0.0.2.tgz (roda o build sozinho)
 ```
 
 ### 1.2 Instalar no projeto
 
 ```powershell
 cd C:\meu-projeto\frontend
-npm install C:\temp\componentes-react-0.0.1.tgz
+npm install C:\temp\componentes-react-0.0.2.tgz
 ```
 
 Outras formas, se preferir: `npm install file:D:/Componentes_React_Python/frontend` (aponta para a pasta; rode `npm run build` lá antes) ou um workspace npm. `react` e `react-dom` (>= 18) são **peerDependencies**: o seu projeto já os tem.

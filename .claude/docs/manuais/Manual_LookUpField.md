@@ -64,7 +64,7 @@ A instância HTTP (`minhaApi`) é a do seu projeto (axios etc.) e deve ter a `ba
 |---|---|---|
 | `label`, `placeholder`, `id`, `className` | — | |
 | `enabled` | `"ENABLE"` | `"ENABLE" \| "DISABLED" \| "READONLY"`. Fora de `ENABLE`, F4 e o botão não abrem o modal |
-| `qtdMinimaCaracterBusca` | 3 | Mínimo para buscar **só por texto**. **Nunca abaixo de 3** (piso do backend) |
+| `qtdMinimaCaracterBusca` | 3 | Mínimo para buscar **só por texto**. **Nunca abaixo de 3** (piso do backend). Sem efeito com `definicao.pesquisarAoAbrir` |
 | `larguraCampo` | 9rem | Largura do Código, em caracteres |
 | `larguraDescricaoPx` | resto da linha | Largura da Descrição, em pixels |
 | `mascaraCodigo` | — | Máscara do `FNC_FORMATA` para o Código, aplicada **fora do foco** e com o código válido |
@@ -108,6 +108,7 @@ A instância HTTP (`minhaApi`) é a do seu projeto (axios etc.) e deve ter a `ba
 | `colunasAdicionais?[]` | Colunas devolvidas sem aparecer no grid (úteis em `mascaraGrid` por função) |
 | `colunaCpf?`, `colunaCnpj?`, `colunaDtNascto?` | Ligam os filtros extras do modal |
 | `qtdeLinhas?` | 1 a 300 (padrão 100) |
+| `pesquisarAoAbrir?` | O modal já abre listando (até `qtdeLinhas`) e o texto filtra sem mínimo de caracteres; precisa do gancho `permitir_pesquisa_ao_abrir` no backend (`Manual_BackendLookup.md`) |
 | `filtro?` | SQL complementar, **só com `base: "TABELA"`**: `" and tp_situacao = 'A' "`. Vale na pesquisa e na busca por código |
 
 O backend valida a definição a cada chamada e responde 400 com a lista completa de problemas (ver `Manual_BackendLookup.md` §7 para as regras de segurança).
@@ -129,7 +130,7 @@ O backend valida a definição a cada chamada e responde 400 com a lista complet
 
 ### Modal de pesquisa
 
-- Título, filtros extras (só os que a definição declara), campo **Pesquisar** (texto) com o mínimo de caracteres, grid, **Cancelar** e **Selecionar**. Cada abertura começa **em branco**. O foco vai ao primeiro campo: data de nascimento → CPF → CNPJ → texto.
+- Título, filtros extras (só os que a definição declara), campo **Pesquisar** (texto) com o mínimo de caracteres, grid, **Cancelar** e **Selecionar**. Cada abertura começa **em branco** (com `pesquisarAoAbrir`, os campos em branco e a lista já carregada; o campo Pesquisar mostra "Digite para filtrar"). O foco vai ao primeiro campo: data de nascimento → CPF → CNPJ → texto.
 - **Texto**: convertido para **maiúsculas** na própria caixa. `AUTOMATICA` pesquisa 300 ms depois de parar de digitar; `COM_BOTAO_PESQUISA` pesquisa no botão **Pesquisar** ou no **Enter** do texto.
 - **Filtros extras** (data de nascimento, CPF, CNPJ — são os campos `DataField`, `CpfField` e `CnpjField`): ao sair de um filtro **preenchido e válido**, pesquisa **na hora**, em qualquer `tipoRefreshGrid`, **sem exigir texto**. Combinam com o texto por AND. Filtro inválido não pesquisa (e não deixa sair). Filtro vazio não repesquisa. Os filtros **nunca** aceitam valor inválido.
 - **Grid**: ↑/↓ mudam a linha, **Enter** escolhe (em `COM_BOTAO_PESQUISA`, o Enter no texto pesquisa, a menos que você já tenha navegado no grid), **duplo clique** escolhe, **Selecionar** escolhe a linha atual.

@@ -308,9 +308,10 @@ Campo Código + Descrição (somente leitura) + botão `...`. A configuração d
 | `colunasAdicionais` | `string[]` | não | Colunas devolvidas sem aparecer no grid (úteis em `mascaraGrid` por função) |
 | `colunaCpf` / `colunaCnpj` / `colunaDtNascto` | `string` | não | Ligam os filtros extras CPF / CNPJ / data de nascimento no modal (pesquisam na hora ao sair do filtro) |
 | `qtdeLinhas` | `number` | não | 1 a 300 (padrão 100) |
+| `pesquisarAoAbrir` | `boolean` | não | O modal já abre listando (até `qtdeLinhas`) e o texto pesquisa **sem mínimo de caracteres**. Exige liberar a consulta no backend (`permitir_pesquisa_ao_abrir`); sem isso a pesquisa vazia ou curta volta 400 |
 | `filtro` | `string` | não | SQL complementar `" and tp_situacao = 'A' "`, **só com `base: "TABELA"`**. Vale na pesquisa e na busca por código. Sem `;`, comentários, `@`, `:`, DML |
 
-Comportamento-chave: código validado ao **sair** do campo; inexistente = `mensagemNaoExistencia` no campo Descrição + bloqueio de saída; erro de consulta **não** bloqueia; vazio nunca bloqueia; F4 ou `...` abrem o modal; modal começa em branco a cada abertura.
+Comportamento-chave: código validado ao **sair** do campo; inexistente = `mensagemNaoExistencia` no campo Descrição + bloqueio de saída; erro de consulta **não** bloqueia; vazio nunca bloqueia; F4 ou `...` abrem o modal; modal começa em branco a cada abertura (com `pesquisarAoAbrir`, já com a lista).
 
 ---
 
@@ -344,13 +345,14 @@ app.include_router(criar_roteador_lookup(ConfiguracaoLookup(...)), prefix="/api/
 | `permitir_anonimo` | `bool` | não | `False` | Libera sem autenticação. **Só exemplos e testes** |
 | `tabelas_permitidas` | `Collection[str]` | não | `None` | Lista de tabelas liberadas (sem diferenciar maiúsculas). `None` = sem restrição. Com lista, só `base=TABELA` com nome na lista passa; `base=SELECT` é recusado (403) |
 | `autorizar` | `(definicao, usuario) -> bool` | não | `None` | Gancho: `False` recusa a consulta (403) |
+| `permitir_pesquisa_ao_abrir` | `(definicao, usuario) -> bool` | não | `None` | Gancho: `True` aceita a pesquisa sem critério e sem o mínimo de caracteres, só quando a definição pede `pesquisarAoAbrir`. `None`: nunca |
 | `tipos_erro_banco` | `tuple[type[BaseException], ...]` | não | `None` | Exceções que são erro do banco (viram 400 com a mensagem completa). `None`: detecta pela hierarquia DB-API de qualquer driver |
 
 ### Contrato HTTP (`POST {prefixo}/...`, JSON em camelCase)
 
 | Rota | Corpo | Resposta |
 |---|---|---|
-| `/pesquisa` | `{ definicao, texto?, dtNascto? (yyyy-MM-dd), cpf?, cnpj? }` (ao menos um critério; texto sozinho exige 3+ caracteres) | `{ linhas, limiteAtingido }` |
+| `/pesquisa` | `{ definicao, texto?, dtNascto? (yyyy-MM-dd), cpf?, cnpj? }` (ao menos um critério; texto sozinho exige 3+ caracteres; as duas exigências caem com `pesquisarAoAbrir` liberado) | `{ linhas, limiteAtingido }` |
 | `/codigo` | `{ definicao, valor }` | sempre 200: `{ situacao: "ENCONTRADO" \| "NAO_ENCONTRADO" \| "MAIS_DE_UM", codigo, descricao, linha }` |
 | `/validacao` | `definicao` | `{ ok, inconsistencias: [{ chave, propriedade, mensagem }] }` (não executa nada) |
 

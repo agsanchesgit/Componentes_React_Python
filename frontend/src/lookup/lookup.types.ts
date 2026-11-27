@@ -46,6 +46,12 @@ export interface LookupDefinicao {
   /** Teto de 300. Padrão do backend: 100. */
   qtdeLinhas?: number;
   /**
+   * O modal já abre listando (até `qtdeLinhas`) e o texto pesquisa com qualquer tamanho, inclusive vazio. O backend só
+   * aceita se o projeto liberar a consulta em `ConfiguracaoLookup.permitir_pesquisa_ao_abrir`. Para tabelas pequenas
+   * ou já restritas (ex.: cadastro de uma empresa). Padrão: desligado.
+   */
+  pesquisarAoAbrir?: boolean;
+  /**
    * Condição fixa acrescentada ao WHERE da consulta, ex.: `" and tp_sexo = 'M' "`. Vale na pesquisa e na busca por
    * código. Só com `base: "TABELA"`; com `base: "SELECT"`, escreva a condição no próprio SELECT.
    * Vai como texto SQL (sem parâmetros): o backend recusa `;`, comentários, `@`, DML/DDL, `INTO` e parênteses sem par.
@@ -78,7 +84,7 @@ export interface LookUpFieldProps {
   obrigatorio: boolean;
   mensagemNaoExistencia: string;
 
-  /** Mínimo para buscar por texto. Nunca abaixo de 3 (piso do backend). Padrão: 3. */
+  /** Mínimo para buscar por texto. Nunca abaixo de 3 (piso do backend). Padrão: 3. Sem efeito com `pesquisarAoAbrir`. */
   qtdMinimaCaracterBusca?: number;
   enabled?: LookupEnabled;
   placeholder?: string;

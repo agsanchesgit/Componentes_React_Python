@@ -14,7 +14,7 @@ from .lookup.definicao import (
 from .lookup.rotas import criar_roteador_lookup
 from .lookup.servico import ServicoLookup
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 __all__ = [
     "ConfiguracaoLookup",

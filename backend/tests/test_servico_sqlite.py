@@ -87,6 +87,25 @@ def test_limite_exato_nao_atinge(servico):
     assert wResposta.limite_atingido is False
 
 
+@pytest.mark.parametrize("liberado", [False, True])
+def test_pesquisa_ao_abrir_so_vale_com_a_liberacao_do_projeto(servico, liberado):
+    servico._config.permitir_pesquisa_ao_abrir = lambda definicao, usuario: liberado
+    wRequisicao = LookupPesquisaRequest(definicao=fncDefinicao(pesquisar_ao_abrir=True))
+    if not liberado:
+        with pytest.raises(ErroNegocio, match="ao menos um critério"):
+            servico.pesquisar(wRequisicao)
+        return
+    wResposta = servico.pesquisar(wRequisicao)
+    assert len(wResposta.linhas) == 3
+    assert wResposta.limite_atingido is True
+
+
+def test_sem_pedir_na_definicao_a_liberacao_nao_muda_nada(servico):
+    servico._config.permitir_pesquisa_ao_abrir = lambda definicao, usuario: True
+    with pytest.raises(ErroNegocio, match="ao menos 3 caracteres"):
+        servico.pesquisar(LookupPesquisaRequest(definicao=fncDefinicao(), texto="an"))
+
+
 def test_curingas_digitados_valem_literalmente(servico):
     wPercentual = servico.pesquisar(LookupPesquisaRequest(definicao=fncDefinicao(), texto="100%"))
     assert [linha["CD_PESSOA"] for linha in wPercentual.linhas] == [4]

@@ -335,6 +335,26 @@ describe("LookUpField: modal de pesquisa", () => {
     await waitFor(() => expect(fncChamadas(wApi, "/pesquisa").length).toBe(1), { timeout: 2000 });
   });
 
+  it("pesquisarAoAbrir: o modal já abre listando e o texto filtra sem mínimo de caracteres", async () => {
+    const wUsuario = userEvent.setup();
+    const wApi = criarApiFalsa();
+    const wDefinicao = { ...DEFINICAO, pesquisarAoAbrir: true };
+    fncRenderizar(wApi, { definicao: wDefinicao });
+    expect(fncChamadas(wApi, "/pesquisa").length).toBe(0); // só ao abrir o modal
+    await wUsuario.click(fncCodigo());
+    await wUsuario.keyboard("{F4}");
+
+    await waitFor(() => within(fncModal()).getByText("BRUNO LIMA"), { timeout: 2000 });
+    expect(fncChamadas(wApi, "/pesquisa")[0][1]).toEqual({ definicao: wDefinicao });
+
+    const wTexto = within(fncModal()).getByLabelText("Pesquisar") as HTMLInputElement;
+    expect(wTexto.placeholder).toBe("Digite para filtrar");
+    await wUsuario.type(wTexto, "an");
+    await waitFor(() => expect(fncChamadas(wApi, "/pesquisa").at(-1)?.[1]).toEqual({ definicao: wDefinicao, texto: "AN" }), {
+      timeout: 2000,
+    });
+  });
+
   it("duplo clique na linha escolhe: fecha o modal, emite o resultado e devolve o foco", async () => {
     const wUsuario = userEvent.setup();
     const wOnChange = vi.fn();

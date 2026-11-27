@@ -72,6 +72,8 @@ class LookupDefinicao(ModeloCamelCase):
     coluna_cpf: str | None = None
     coluna_dt_nascto: str | None = None
     qtde_linhas: int = 100
+    # Pede a pesquisa sem critério e sem o mínimo de caracteres. Só vale se o projeto liberar na configuração.
+    pesquisar_ao_abrir: bool = False
     # Condição fixa acrescentada ao WHERE (só com base = TABELA). Entra como AND (...) na pesquisa e no código.
     filtro: str | None = None
 

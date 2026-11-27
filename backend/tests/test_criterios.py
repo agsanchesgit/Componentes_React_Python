@@ -71,6 +71,11 @@ def test_requisicao_vazia_e_recusada():
         fncNormalizar(fncRequisicao(texto="   "))
 
 
+def test_pesquisa_ao_abrir_liberada_aceita_vazio_e_texto_curto():
+    assert fncNormalizar(fncRequisicao(), sem_minimo=True).sem_criterio_liberado
+    assert fncNormalizar(fncRequisicao(texto="ab"), sem_minimo=True).texto == "ab"
+
+
 def test_filtro_que_a_definicao_nao_tem_e_recusado():
     wSemCpf = LookupPesquisaRequest(definicao=fncDefinicaoValida(), cpf="374287813")
     with pytest.raises(ErroNegocio, match="não possui filtro de CPF"):
